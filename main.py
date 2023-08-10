@@ -1,5 +1,6 @@
 import argparse
-from utils.wrappers import Parser, Database
+from utils.wrappers.parser import Parser
+from utils.wrappers.database import Database
 
 
 def main(args: argparse.Namespace):
@@ -8,8 +9,8 @@ def main(args: argparse.Namespace):
 
 if __name__ == "__main__":
     myparser = Parser(version="0.1.0")
-    database = Database()
+    Database.setup_databases()
     myparser.setup()
     args = myparser.get_args()
     main(args)
-    database.dispose()
+    Database.dispose()

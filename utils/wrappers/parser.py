@@ -2,9 +2,6 @@ import argparse
 import utils.command_functions as cf
 from datetime import datetime
 from utils import validators
-from pathlib import Path
-import os
-import sqlite3
 
 
 class Parser:
@@ -118,26 +115,4 @@ class Parser:
     def get_args(self) -> argparse.Namespace:
         args = self.parser.parse_args()
         return args
-
-
-class Database:
-    def __init__(self):
-        self.db_position = Path(os.getenv("HOME"), ".config", "kaam", "sqlite.db")
-        self.db = None
-
-        self.setup_tasks_db()
-
-    def setup_tasks_db(self):
-        if not self.db_position.parent.exists():
-            self.db_position.parent.mkdir(parents=True)
-
-        self.db = sqlite3.connect(self.db_position.absolute())
-        cursor = self.db.cursor()
-        cursor.execute(
-            "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, name TEXT, priority INTEGER, due TEXT, done INTEGER);"
-        )
-        self.db.commit()
-        cursor.close()
-
-    def dispose(self):
-        self.db.close()
+    

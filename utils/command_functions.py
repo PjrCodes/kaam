@@ -1,4 +1,5 @@
 import argparse
+from .wrappers.database import Database
 
 
 def add_to_tasks(args: argparse.Namespace):
@@ -10,7 +11,8 @@ def remove_from_tasks(args: argparse.Namespace):
 
 
 def list_tasks(args: argparse.Namespace):
-    pass
+    db = Database()
+    print(db.get_tasks())
 
 
 def done_task(args: argparse.Namespace):
