@@ -130,7 +130,7 @@ class Database:
     def setup_tasks_db(self):
         if not self.db_position.parent.exists():
             self.db_position.parent.mkdir(parents=True)
-            
+
         self.db = sqlite3.connect(self.db_position.absolute())
         cursor = self.db.cursor()
         cursor.execute(
@@ -138,6 +138,6 @@ class Database:
         )
         self.db.commit()
         cursor.close()
-        
+
     def dispose(self):
         self.db.close()
