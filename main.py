@@ -1,3 +1,5 @@
+#!/opt/homebrew/bin/python3
+
 import argparse
 from utils.wrappers.parser import Parser
 from utils.wrappers.database import Database
