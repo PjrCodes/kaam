@@ -4,11 +4,14 @@ from rich.console import Console
 from rich.table import Table
 from datetime import datetime
 from rich import box
+from dateutil import parser
+from . import validators
 
 
 def add_to_tasks(args: argparse.Namespace):
     db = Database()
-    db.add_task(" ".join(args.name), args.priority, args.due)
+    parsed_date = validators.valid_date(args.due)
+    db.add_task(" ".join(args.name), args.priority, parsed_date)
 
 
 def remove_from_tasks(args: argparse.Namespace):
@@ -52,7 +55,7 @@ def list_tasks(args: argparse.Namespace):
 
     console = Console()
     print()
-    console.print(rtable)
+    console.print(rtable, justify="center")
     print()
 
 

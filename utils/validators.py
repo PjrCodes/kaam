@@ -1,4 +1,6 @@
 import argparse 
+from datetime import datetime
+from dateutil import parser
 
 def valid_id(idstr: str) -> int:
     try:
@@ -11,3 +13,11 @@ def valid_id(idstr: str) -> int:
     except ValueError:
         msg = f"Invalid ID: {idstr}"
         raise argparse.ArgumentTypeError(msg) 
+    
+def valid_date(datestr: [str]) -> datetime:
+    datestr = " ".join(datestr)
+    try:
+        return parser.parse(datestr)
+    except (parser.ParserError):
+        msg = f"Invalid date: {datestr}"
+        print(msg)

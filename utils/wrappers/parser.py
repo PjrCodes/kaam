@@ -1,6 +1,5 @@
 import argparse
 
-from dateutil import parser
 import utils.command_functions as cf
 from datetime import datetime
 from utils import validators
@@ -43,7 +42,7 @@ class Parser:
             "-d",
             "--due",
             help="Due date of the task, in ISO format: YYYY-MM-DD:HH:mm:ss",
-            type=parser.parse,
+            nargs="+",   
         )
         parser_add.set_defaults(func=cf.add_to_tasks)
 
@@ -94,7 +93,7 @@ class Parser:
             choices=range(1, 6),
         )
         parser_edit.add_argument(
-            "-d", "--due", help="New due date of the task.", type=parser.parse
+            "-d", "--due", help="New due date of the task.", nargs="+"
         )
         parser_edit.set_defaults(func=cf.edit_task)
 
