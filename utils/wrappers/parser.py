@@ -1,4 +1,6 @@
 import argparse
+
+from dateutil import parser
 import utils.command_functions as cf
 from datetime import datetime
 from utils import validators
@@ -9,7 +11,7 @@ class Parser:
         self.parser = argparse.ArgumentParser(
             prog="kaam",
             description="A simple manager for tasks.",
-            epilog="Thanks for using kaam!",
+            epilog="Kaam karo yaar.",
         )
         self.version = version
 
@@ -28,7 +30,7 @@ class Parser:
         )
 
         parser_add = subparsers.add_parser("add", help="Add a task to the list.")
-        parser_add.add_argument("name", help="Name of the task.")
+        parser_add.add_argument("name", help="Name of the task.", nargs="+")
         parser_add.add_argument(
             "-p",
             "--priority",
@@ -41,7 +43,7 @@ class Parser:
             "-d",
             "--due",
             help="Due date of the task, in ISO format: YYYY-MM-DD:HH:mm:ss",
-            type=datetime.fromisoformat,
+            type=parser.parse,
         )
         parser_add.set_defaults(func=cf.add_to_tasks)
 
@@ -83,7 +85,7 @@ class Parser:
         parser_edit.add_argument(
             "id", help="Task ID to edit.", type=validators.valid_id
         )
-        parser_edit.add_argument("name", help="New name of the task.")
+        parser_edit.add_argument("name", help="New name of the task.", nargs="+")
         parser_edit.add_argument(
             "-p",
             "--priority",
@@ -92,25 +94,30 @@ class Parser:
             choices=range(1, 6),
         )
         parser_edit.add_argument(
-            "-d", "--due", help="New due date of the task.", type=datetime.fromisoformat
+            "-d", "--due", help="New due date of the task.", type=parser.parse
         )
         parser_edit.set_defaults(func=cf.edit_task)
 
-        parser_move = subparsers.add_parser("move", help="Move a task in the list.")
-        parser_move.add_argument(
-            "ID", help="Task ID to move.", type=validators.valid_id
-        )
-        parser_move.add_argument("position", help="New position of the task.", type=int)
-        parser_move.add_argument(
-            "-s",
-            "--swap",
-            help="Swap the task with the task at the given position.",
-            action="store_true",
-        )
-        parser_move.set_defaults(func=cf.move_task)
+        # parser_move = subparsers.add_parser("move", help="Move a task in the list.")
+        # parser_move.add_argument(
+        #     "id", help="Task ID to move.", type=validators.valid_id
+        # )
+        # parser_move.add_argument("position", help="New position of the task.", type=int)
+        # parser_move.add_argument(
+        #     "-s",
+        #     "--swap",
+        #     help="Swap the task with the task at the given position.",
+        #     action="store_true",
+        # )
+        # parser_move.set_defaults(func=cf.move_task)
 
         parser_clean = subparsers.add_parser("clean", help="Remove all done tasks.")
         parser_clean.set_defaults(func=cf.clean_tasks)
+
+        self.parser.set_defaults(func=self.__print_help_wrapper)
+
+    def __print_help_wrapper(self, args):
+        self.parser.print_help()
 
     def get_args(self) -> argparse.Namespace:
         args = self.parser.parse_args()
