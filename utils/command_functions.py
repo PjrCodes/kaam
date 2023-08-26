@@ -71,7 +71,8 @@ def undone_task(args: argparse.Namespace):
 
 def edit_task(args: argparse.Namespace):
     db = Database()
-    db.edit_task(args.id, " ".join(args.name), args.priority, args.due)
+    parsed_date = validators.valid_date(args.due)
+    db.edit_task(args.id, " ".join(args.name), args.priority, parsed_date)
 
 
 def clean_tasks(args: argparse.Namespace):
