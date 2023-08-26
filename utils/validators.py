@@ -15,9 +15,12 @@ def valid_id(idstr: str) -> int:
         raise argparse.ArgumentTypeError(msg) 
     
 def valid_date(datestr: [str]) -> datetime:
-    datestr = " ".join(list(datestr))
-    try:
-        return parser.parse(datestr)
-    except (parser.ParserError):
-        msg = f"Invalid date: {datestr}"
-        print(msg)
+    if datestr:
+        datestr = " ".join(list(datestr))
+        try:
+            return parser.parse(datestr)
+        except (parser.ParserError):
+            msg = f"Invalid date: {datestr}"
+            print(msg)
+    else:
+        return datestr
