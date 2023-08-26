@@ -10,7 +10,7 @@ class Parser:
         self.parser = argparse.ArgumentParser(
             prog="kaam",
             description="A simple manager for tasks.",
-            epilog="Kaam karo yaar.",
+            epilog="Kaam karo yaar."
         )
         self.version = version
 
@@ -28,7 +28,7 @@ class Parser:
             "--version", action="version", version=f"%(prog)s {self.version}"
         )
 
-        parser_add = subparsers.add_parser("add", help="Add a task to the list.")
+        parser_add = subparsers.add_parser("add", help="Add a task to the list.", aliases=["a"])
         parser_add.add_argument("name", help="Name of the task.", nargs="+")
         parser_add.add_argument(
             "-p",
@@ -36,7 +36,7 @@ class Parser:
             help="Priority of the task. Higher numbers are higher priority.",
             type=int,
             choices=range(1, 6),
-            default=5,
+            default=5
         )
         parser_add.add_argument(
             "-d",
@@ -47,14 +47,14 @@ class Parser:
         parser_add.set_defaults(func=cf.add_to_tasks)
 
         parser_remove = subparsers.add_parser(
-            "remove", help="Remove a task from the list."
+            "remove", help="Remove a task from the list.", aliases=["r", "rm"]
         )
         parser_remove.add_argument(
             "id", help="Task ID to remove", type=validators.valid_id
         )
         parser_remove.set_defaults(func=cf.remove_from_tasks)
 
-        parser_list = subparsers.add_parser("list", help="List all tasks.")
+        parser_list = subparsers.add_parser("list", help="List all tasks.", aliases=["ls", "l"])
         parser_list.add_argument(
             "-s",
             "--sort",
@@ -65,7 +65,7 @@ class Parser:
         parser_list.set_defaults(func=cf.list_tasks)
 
         parser_done = subparsers.add_parser(
-            "done", aliases=["do", "complete"], help="Mark a task as done."
+            "done", aliases=["do", "complete", "d"], help="Mark a task as done."
         )
         parser_done.add_argument(
             "id", help="Task ID to mark as done.", type=validators.valid_id
@@ -73,14 +73,14 @@ class Parser:
         parser_done.set_defaults(func=cf.done_task)
 
         parser_undone = subparsers.add_parser(
-            "undone", aliases=["undo", "finish"], help="Mark a task as undone."
+            "undone", aliases=["undo", "finish", "udo", "u"], help="Mark a task as undone."
         )
         parser_undone.add_argument(
             "id", help="Task ID to mark as undone.", type=validators.valid_id
         )
         parser_undone.set_defaults(func=cf.undone_task)
 
-        parser_edit = subparsers.add_parser("edit", help="Edit a task.")
+        parser_edit = subparsers.add_parser("edit", aliases=["e","change"], help="Edit a task.")
         parser_edit.add_argument(
             "id", help="Task ID to edit.", type=validators.valid_id
         )
@@ -110,7 +110,7 @@ class Parser:
         # )
         # parser_move.set_defaults(func=cf.move_task)
 
-        parser_clean = subparsers.add_parser("clean", help="Remove all done tasks.")
+        parser_clean = subparsers.add_parser("clean", aliases=["clear", "cls", "clr", "c"], help="Remove all done tasks.")
         parser_clean.set_defaults(func=cf.clean_tasks)
 
         self.parser.set_defaults(func=self.__print_help_wrapper)
