@@ -4,7 +4,7 @@ import argparse
 from utils.wrappers.parser import Parser
 from utils.wrappers.database import Database
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 
 def main(args: argparse.Namespace):
     args.func(args)
