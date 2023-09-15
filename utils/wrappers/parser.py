@@ -1,7 +1,6 @@
 import argparse
 
 import utils.command_functions as cf
-from datetime import datetime
 from utils import validators
 
 
@@ -15,6 +14,7 @@ class Parser:
         self.version = version
 
     def setup(self):
+        self.parser.add_argument("-m", "--meta", help="Show metadata.", action="store_true")
         self.parser.add_argument(
             "-v",
             "--verbosity",
@@ -59,8 +59,8 @@ class Parser:
             "-s",
             "--sort",
             help="Sort tasks by a field.",
-            choices=["name", "priority", "due"],
-            default="name",
+            choices=["name", "priority", "due", "created"],
+            default="created",
         )
         parser_list.set_defaults(func=cf.list_tasks)
 
@@ -84,7 +84,7 @@ class Parser:
         parser_edit.add_argument(
             "id", help="Task ID to edit.", type=validators.valid_id
         )
-        parser_edit.add_argument("name", help="New name of the task.", nargs="+")
+        parser_edit.add_argument("-n", "--name", help="New name of the task.", nargs="+")
         parser_edit.add_argument(
             "-p",
             "--priority",

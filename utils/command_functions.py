@@ -1,4 +1,6 @@
 import argparse
+
+from utils.models import Task
 from .wrappers.database import Database
 from rich.console import Console
 from rich.table import Table
@@ -11,7 +13,8 @@ from . import validators
 def add_to_tasks(args: argparse.Namespace):
     db = Database()
     parsed_date = validators.valid_date(args.due)
-    db.add_task(" ".join(args.name), args.priority, parsed_date)
+    nt = Task(" ".join(args.name), args.priority, parsed_date, False, datetime.now())
+    nt = db.add_task(nt)  # add task to database, and get the task with the id
 
 
 def remove_from_tasks(args: argparse.Namespace):
@@ -23,16 +26,19 @@ def list_tasks(args: argparse.Namespace):
     db = Database()
     # print the tasks sorted by args.sort
     tasks = db.get_tasks()
+
     if args.sort == "name":
         tasks.sort(key=lambda task: task.name)
     elif args.sort == "priority":
         tasks.sort(key=lambda task: task.priority, reverse=True)
     elif args.sort == "due":
-        tasks.sort(key=lambda task: task.due)
+        tasks.sort(key=lambda task: task.due if task.due else datetime.max)
+    elif args.sort == "created":
+        tasks.sort(key=lambda task: task.time_created)
 
     rtable = Table(
         title="Tasks",
-        caption=datetime.now().strftime("%d %B %Y %H:%M"),
+        caption=f'{datetime.now().strftime("%d %B %Y %H:%M")}, [not italic][bold]{len(tasks)} tasks[/bold][/not italic]',
         box=box.ROUNDED,
         min_width=100,
         title_style="bold magenta",
@@ -72,7 +78,13 @@ def undone_task(args: argparse.Namespace):
 def edit_task(args: argparse.Namespace):
     db = Database()
     parsed_date = validators.valid_date(args.due)
-    db.edit_task(args.id, " ".join(args.name), args.priority, parsed_date)
+    if args.name or args.priority or parsed_date:
+        db.edit_task(
+            args.id,
+            " ".join(args.name) if args.name else None,
+            args.priority,
+            parsed_date,
+        )
 
 
 def clean_tasks(args: argparse.Namespace):
