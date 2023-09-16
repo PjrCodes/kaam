@@ -6,7 +6,6 @@ from rich.console import Console
 from rich.table import Table
 from datetime import datetime
 from rich import box
-from dateutil import parser
 from . import validators
 
 
@@ -19,7 +18,8 @@ def add_to_tasks(args: argparse.Namespace):
 
 def remove_from_tasks(args: argparse.Namespace):
     db = Database()
-    db.remove_task(args.id)
+    for tid in args.id:
+        db.remove_task(tid)
 
 
 def list_tasks(args: argparse.Namespace):
@@ -67,12 +67,14 @@ def list_tasks(args: argparse.Namespace):
 
 def done_task(args: argparse.Namespace):
     db = Database()
-    db.mark_task_as_done(args.id)
+    for tid in args.id:
+        db.mark_task_as_done(tid)
 
 
 def undone_task(args: argparse.Namespace):
     db = Database()
-    db.mark_task_as_undone(args.id)
+    for tid in args.id:
+        db.mark_task_as_undone(tid)
 
 
 def edit_task(args: argparse.Namespace):
@@ -90,3 +92,24 @@ def edit_task(args: argparse.Namespace):
 def clean_tasks(args: argparse.Namespace):
     db = Database()
     db.clean_tasks()
+
+def add_category(args: argparse.Namespace):
+    pass
+
+def remove_category(args: argparse.Namespace):
+    pass
+
+def list_categories(args: argparse.Namespace):
+    pass
+
+def edit_category(args: argparse.Namespace):
+    pass
+
+def add_category_alias(args: argparse.Namespace):
+    pass
+
+def remove_category_alias(args: argparse.Namespace):
+    pass
+
+def list_category_aliases(args: argparse.Namespace):
+    pass
