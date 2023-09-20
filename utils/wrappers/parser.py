@@ -48,6 +48,12 @@ class Parser:
             help="Due date of the task, in ISO format: YYYY-MM-DD:HH:mm:ss",
             nargs="+",
         )
+        parser_add.add_argument(
+            "-c",
+            "--category",
+            help="Category of the task.",
+        )
+
         parser_add.set_defaults(func=cf.add_to_tasks)
 
         parser_remove = subparsers.add_parser(
@@ -110,6 +116,7 @@ class Parser:
             choices=range(1, 6),
         )
         group.add_argument("-d", "--due", help="New due date of the task.", nargs="+")
+        group.add_argument('-c', '--category', help='New category of the task.')
         parser_edit.set_defaults(func=cf.edit_task)
 
         parser_clean = subparsers.add_parser(
@@ -129,7 +136,10 @@ class Parser:
             "add", aliases=["a"], help="Add a category."
         )
         parser_category_add.add_argument(
-            "name", help="Name of the category.", nargs="+"
+            "name", help="Name of the category."
+        )
+        parser_category_add.add_argument(
+            "-a","--aliases", help="Aliases of the category.", nargs="+"
         )
         parser_category_add.set_defaults(func=cf.add_category)
 
@@ -137,7 +147,7 @@ class Parser:
             "remove", aliases=["r", "rm"], help="Remove a category."
         )
         parser_category_remove.add_argument(
-            "name", help="Name of the category.", nargs="+"
+            "name", help="Name of the category."
         )
         parser_category_remove.set_defaults(func=cf.remove_category)
 
@@ -186,7 +196,10 @@ class Parser:
         categoryrmadd.set_defaults(func=cf.remove_category_alias)
 
         catlsadd = subparsers_category_aliases.add_parser(
-            "list", aliases=["ls", "l"], help="List all aliases."
+            "list", aliases=["ls", "l"], help="List all aliases for a category."
+        )
+        catlsadd.add_argument(
+            "name", help="Name of the category to list aliases for."
         )
         catlsadd.set_defaults(func=cf.list_category_aliases)
 
@@ -198,3 +211,4 @@ class Parser:
     def get_args(self) -> argparse.Namespace:
         args = self.parser.parse_args()
         return args
+    

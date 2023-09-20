@@ -9,12 +9,15 @@ class Task:
         self.due = due
         self.done = (done == 1)
 
+        self.category = None
+
         self.time_created = time_created if time_created else datetime.min
 
     @classmethod
-    def create_from_db(cls, database_repr):
+    def create_from_db(cls, database_repr, category=None):
         t = Task(*(database_repr[1:]))
         t.id = database_repr[0]
+        t.category = category
         return t
     
     def __repr__(self):

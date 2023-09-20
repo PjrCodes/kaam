@@ -80,12 +80,13 @@ def undone_task(args: argparse.Namespace):
 def edit_task(args: argparse.Namespace):
     db = Database()
     parsed_date = validators.valid_date(args.due)
-    if args.name or args.priority or parsed_date:
+    if args.name or args.priority or parsed_date or args.category:
         db.edit_task(
             args.id,
             " ".join(args.name) if args.name else None,
             args.priority,
             parsed_date,
+            args.category
         )
 
 
@@ -94,22 +95,32 @@ def clean_tasks(args: argparse.Namespace):
     db.clean_tasks()
 
 def add_category(args: argparse.Namespace):
-    pass
+    db = Database()
+    db.add_category(args.name.lower(), args.aliases)
 
 def remove_category(args: argparse.Namespace):
-    pass
+    db = Database()
+    db.remove_category(args.name.lower())
 
 def list_categories(args: argparse.Namespace):
-    pass
+    db = Database()
+    categories = db.get_categories()
+    print([cat[1] for cat in categories])
 
 def edit_category(args: argparse.Namespace):
-    pass
+    db = Database()
+    db.edit_category(args.name.lower(), args.new_name.lower())
 
 def add_category_alias(args: argparse.Namespace):
-    pass
+    db = Database()
+    db.add_category_alias(args.name.lower(), " ".join(args.alias).lower())
 
 def remove_category_alias(args: argparse.Namespace):
-    pass
+    db = Database()
+    db.remove_category_alias(args.name.lower(), " ".join(args.alias).lower())
 
 def list_category_aliases(args: argparse.Namespace):
-    pass
+    db = Database()
+    aliases = db.get_category_aliases(args.name.lower())
+    print(aliases)
+
